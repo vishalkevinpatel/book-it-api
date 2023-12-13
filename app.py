@@ -36,3 +36,8 @@ def update(id):
     description = request.form.get("description", book["description"])
     image = request.form.get("image", book["image"])
     return db.books_update_by_id(id, title, author, description, image)
+
+
+@app.route("/books/<id>.json", methods=["DELETE"])
+def destroy(id):
+    return db.books_destroy_by_id(id)
