@@ -21,3 +21,8 @@ def create():
     description = request.form.get("description")
     image = request.form.get("image")
     return db.books_create(title, author, description, image)
+
+
+@app.route("/books/<id>.json")
+def show(id):
+    return db.books_find_by_id(id)
