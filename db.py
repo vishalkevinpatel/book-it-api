@@ -73,3 +73,17 @@ def books_all():
         """
     ).fetchall()
     return [dict(row) for row in rows]
+
+
+def books_create(title, author, description, image):
+    conn = connect_to_db()
+    row = conn.execute(
+        """
+        INSERT INTO books (title, author,description,image)
+        VALUES (?, ?, ?,?)
+        RETURNING *
+        """,
+        (title, author, description, image),
+    ).fetchone()
+    conn.commit()
+    return dict(row)
