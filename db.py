@@ -113,3 +113,16 @@ def books_update_by_id(id, title, author, description, image):
     ).fetchone()
     conn.commit()
     return dict(row)
+
+
+def books_destroy_by_id(id):
+    conn = connect_to_db()
+    row = conn.execute(
+        """
+        DELETE from books
+        WHERE id = ?
+        """,
+        id,
+    )
+    conn.commit()
+    return {"message": "Book destroyed successfully"}

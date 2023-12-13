@@ -30,8 +30,9 @@ def show(id):
 
 @app.route("/books/<id>.json", methods=["PATCH"])
 def update(id):
-    title = request.form.get("title")
-    author = request.form.get("author")
-    description = request.form.get("description")
-    image = request.form.get("image")
+    book = db.books_find_by_id(id)
+    title = request.form.get("title", book["title"])
+    author = request.form.get("author", book["author"])
+    description = request.form.get("description", book["description"])
+    image = request.form.get("image", book["image"])
     return db.books_update_by_id(id, title, author, description, image)
