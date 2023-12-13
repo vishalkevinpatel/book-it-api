@@ -99,3 +99,17 @@ def books_find_by_id(id):
         id,
     ).fetchone()
     return dict(row)
+
+
+def books_update_by_id(id, title, author, description, image):
+    conn = connect_to_db()
+    row = conn.execute(
+        """
+        UPDATE books SET title = ?, author = ?, description = ?, image = ?
+        WHERE id = ?
+        RETURNING *
+        """,
+        (title, author, description, image, id),
+    ).fetchone()
+    conn.commit()
+    return dict(row)
