@@ -16,13 +16,44 @@ def initial_setup():
     )
     conn.execute(
         """
+        DROP TABLE IF EXISTS users;
+        """
+    )
+    conn.execute(
+        """
+        DROP TABLE IF EXISTS collections;
+        """
+    )
+
+    conn.execute(
+        """
         CREATE TABLE books (
           id INTEGER PRIMARY KEY NOT NULL,
-          title TEXT,
-          author TEXT,
+          title TEXT NOT NULL,
+          author TEXT NOT NULL,
           description TEXT,
           image TEXT
         );
+        """
+    )
+    conn.execute(
+        """
+        CREATE TABLE users (
+          id INTEGER PRIMARY KEY NOT NULL,
+          username TEXT NOT NULL UNIQUE,
+          hashed_password TEXT NOT NULL
+        )
+        """
+    )
+    conn.execute(
+        """
+        CREATE TABLE collections (
+          id INTEGER PRIMARY KEY NOT NULL,
+          user_id INTEGER NOT NULL,
+          book_id INTEGER NOT NULL,
+          FOREIGN KEY (user_id) REFERENCES users(id),
+          FOREIGN KEY (book_id) REFERENCES books(id)
+        )
         """
     )
     conn.commit()
@@ -128,4 +159,15 @@ def books_destroy_by_id(id):
     return {"message": "Book destroyed successfully"}
 
 
-    
+def user_create(username, hashed_password):
+    conn = connect_to_db()
+    row = conn.execute(
+        """
+        INSERT INTO users (username, hashed_password)
+        VALUES (?, ?)
+        RETURNING *
+        """,
+        (username, hashed_password),
+    ).fetchone()
+    conn.commit()
+    return dict(row)
