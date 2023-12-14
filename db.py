@@ -171,3 +171,14 @@ def user_create(username, hashed_password):
     ).fetchone()
     conn.commit()
     return dict(row)
+
+def user_find_by_username(username):
+    conn = connect_to_db()
+    row = conn.execute(
+        """
+        SELECT * FROM users
+        WHERE username = ?
+        """,
+        (username,),
+    ).fetchone()
+    return dict(row)
