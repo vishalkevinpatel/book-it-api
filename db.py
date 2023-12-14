@@ -79,11 +79,6 @@ def initial_setup():
             "https://upload.wikimedia.org/wikipedia/en/thumb/7/70/Harry_Potter_and_the_Order_of_the_Phoenix.jpg/220px-Harry_Potter_and_the_Order_of_the_Phoenix.jpg",
         ),
     ]
-    # users_seed_data = [
-    #     {"Ben", "password"},
-    #     {"Vishal", "password"},
-    #     {"Adina", "password"},
-    # ]
     conn.executemany(
         """
         INSERT INTO books (title, author, description, image)
@@ -91,13 +86,6 @@ def initial_setup():
         """,
         books_seed_data,
     )
-    # conn.executemany(
-    #     """
-    #     INSERT INTO users (username, hashed_password)
-    #     VALUES (?,?)
-    #     """,
-    #     users_seed_data,
-    # )
     conn.commit()
     print("Seed data created successfully with books")
 
