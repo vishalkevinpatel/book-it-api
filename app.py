@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, redirect, request
 from flask import flash
 from flask_cors import CORS
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -54,3 +54,17 @@ def users_create():
     password = request.form.get("password")
 
     return db.user_create(username, generate_password_hash(password))
+
+@app.route("/login", methods=["POST", "GET"])
+def login():
+    username = request.form.get("username")
+    password = request.form.get("password")
+
+    current_user = db.user_find_by_username(username)
+    if current_user and check_password_hash(current_user["hashed_password"], password):
+        return redirect("/")
+    else:
+        # Handle invalid login (e.g., show an error message)
+        return "Invalid username or password"
+    # if check_password_hash(current_user["hashed_password"], password):
+    #     return redirect ("/")
